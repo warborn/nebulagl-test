@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "deck.gl": "^7.3.3",
+    "nebula.gl": "^0.16.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "react-map-gl": "^5.1.1",
     "react-scripts": "3.2.0"
   },
   "scripts": {
@@ -27,5 +30,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "resolutions": {
+    "@turf/difference": "6.0.1"
   }
 }
