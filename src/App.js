@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import DeckGL from "deck.gl";
+import { MapboxLayer } from "@deck.gl/mapbox";
 import { EditableGeoJsonLayer, DrawPolygonMode } from "nebula.gl";
-import MapGL from "react-map-gl";
-
+import MapGL, { CustomLayer } from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import "./App.css";
@@ -20,23 +19,16 @@ const initialViewport = {
   zoom: 15.5
 };
 
-const TOKEN =
+const MAPBOX_ACCESS_TOKEN =
   "pk.eyJ1IjoiYWxlcGhyaSIsImEiOiJjamdwbHpycjIyZm45Mndud3AzamRibHpqIn0.ejAHwSGT6dcGxiDOrPCFLg";
-
-const initialViewState = {
-  longitude: -122.41669,
-  latitude: 37.7853,
-  zoom: 13,
-  pitch: 0,
-  bearing: 0
-};
 
 function App() {
   const [data, setData] = useState(myFeatureCollection);
   const [viewport, setViewport] = useState(initialViewport);
 
-  const layer = new EditableGeoJsonLayer({
+  const layer = new MapboxLayer({
     id: "geojson-layer",
+    type: EditableGeoJsonLayer,
     data,
     mode: DrawPolygonMode,
     selectedFeatureIndexes,
@@ -47,19 +39,17 @@ function App() {
 
   return (
     <div className="App">
-      <DeckGL
-        initialViewState={initialViewState}
-        controller={true}
-        layers={[layer]}
+      <MapGL
+        style={{ width: "100%", height: "100%" }}
+        mapStyle="mapbox://styles/mapbox/light-v9"
+        accessToken={MAPBOX_ACCESS_TOKEN}
+        latitude={viewport.latitude}
+        longitude={viewport.longitude}
+        zoom={viewport.zoom}
+        onViewportChange={viewport => setViewport(viewport)}
       >
-        <MapGL
-          {...viewport}
-          width="100%"
-          height="100%"
-          onViewportChange={viewport => setViewport(viewport)}
-          mapboxApiAccessToken={TOKEN}
-        />
-      </DeckGL>
+        <CustomLayer layer={layer} />
+      </MapGL>
     </div>
   );
 }
